@@ -22,7 +22,7 @@ var routes = require("./routes/api-routes");
 app.use(routes);
 
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://user1:Password1:<dbpassword>@ds163254.mlab.com:63254/heroku_2l84sfr5";
 
 mongoose.connect(MONGODB_URI);
 
