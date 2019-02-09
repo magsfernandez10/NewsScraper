@@ -1,34 +1,44 @@
 var express = require("express");
-
-// Sets up the Express App
-// =============================================================
-var app = express();
-var PORT = process.env.PORT || 8080;
 var mongoose = require("mongoose");
+var expressHandlebars = require("express-handlebars");
+var bodyParser = require("body-parser");
 
-// Sets up the Express app to handle data parsing
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(express.static("public"));
+var PORT = process.env.PORT || 8080;
 
-// Set Handlebars.
-var exphbs = require("express-handlebars");
+var app = express();
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+var router = express.Router();
+
+require("./config/routes")(router);
+
+app.use(express.static(__dirname + "/public"));
+
+app.engine("handlebars", expressHandlebars({
+  defaultLayout: "main"
+}));
+
 app.set("view engine", "handlebars");
 
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-var routes = require("./routes/api-routes");
-app.use(routes);
+app.use(router);
 
+var db = process.env.MONGODB_URI || "mongodb://user1:Password1@ds163254.mlab.com:63254/heroku_2l84sfr5";
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://user1:Password1:<dbpassword>@ds163254.mlab.com:63254/heroku_2l84sfr5";
+mongoose.connect(db, function(error) {
+ 
+   if (error) {
+    console.log(error);
+  }
+ 
+  else {
+    console.log("mongoose connection is successful");
+  }
+});
 
-mongoose.connect(MONGODB_URI);
-
-// Starts the server to begin listening
-// =============================================================
 app.listen(PORT, function() {
-  console.log("App listening on PORT " + PORT);
+  console.log("Listening on port:" + PORT);
 });
 

@@ -87,8 +87,7 @@ $(document).ready(function() {
   function handleArticleScrape() {
 
     $.get("/api/fetch").then(function(data) {
-      console.log(data);
-      // initPage();
+      initPage();
       bootbox.alert("<h3 class='text-center m-top-80'>" + data.message + "<h3>");
     });
   }

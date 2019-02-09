@@ -4,19 +4,18 @@ var cheerio = require("cheerio");
 var scrape = function(cb) {
   
   request("http://www.nytimes.com", function(err, res, body) {
-  //  console.log(body);
+   
     var $ = cheerio.load(body);
 
     var articles = [];
 
-    $("div.css-1100km").each(function(i, element) {
-    //  console.log(element);
-      var head = $(this).find("h2").text().trim();
-      // console.log(head);
+    $(".theme-summary").each(function(i, element) {
+     
+      var head = $(this).children(".story-heading").text().trim();
 
-      var url = $(this).find("a").attr("href");
-console.log(url);
-      var sum = $(this).find(".summary").text().trim();
+      var url = $(this).children(".story-heading").children("a").attr("href");
+
+      var sum = $(this).children(".summary").text().trim();
 
      if (head && sum && url) {
         
@@ -34,9 +33,8 @@ console.log(url);
         articles.push(dataToAdd);
       }
     });
-  console.log(articles);
+  
     cb(articles);
-    
   });
 };
 
